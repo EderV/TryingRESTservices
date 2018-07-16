@@ -104,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
                     String auth = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
                     headers.put("Authorization", auth);
                     return headers;
-                }};
+                }
+            };
             /* ******************* */
 
             requestQueue.add(objectRequest);
