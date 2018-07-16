@@ -54,15 +54,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(v.getId() == R.id.button){
-                    WebService1 webService1 = new WebService1();
-                    webService1.execute();
+                    GETbasicoConAuth geTbasicoConAuth = new GETbasicoConAuth();
+                    geTbasicoConAuth.execute();
                 }
             }
         });
 
     }
 
-    private class WebService1 extends AsyncTask<Void, Void, Void>{
+    private class GETbasicoConAuth extends AsyncTask<Void, Void, Void>{
 
         String USERNAME = "a";
         String PASSWORD = "x";
