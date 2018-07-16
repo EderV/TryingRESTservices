@@ -80,10 +80,7 @@ public class MainActivity extends AppCompatActivity {
             RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
             /* ******************* */
-            JsonObjectRequest objectRequest = new JsonObjectRequest(
-                    Request.Method.GET,
-                    url,
-                    null,
+            JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
@@ -108,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
                     headers.put("Authorization", auth);
                     return headers;
                 }};
-
             /* ******************* */
 
             requestQueue.add(objectRequest);
