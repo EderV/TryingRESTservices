@@ -33,9 +33,6 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     TextView textView, textView2;
 
-    String USERNAME = "a";
-    String PASSWORD = "x";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
