@@ -54,8 +54,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(v.getId() == R.id.button){
-                    GETbasicoConAuth geTbasicoConAuth = new GETbasicoConAuth();
-                    geTbasicoConAuth.execute();
+                    //GETbasicoConAuth geTbasicoConAuth = new GETbasicoConAuth();
+                    //geTbasicoConAuth.execute();
+
+                    GETConParamsConAuth getConParamsConAuth = new GETConParamsConAuth();
+                    getConParamsConAuth.execute();
                 }
             }
         });
@@ -68,11 +71,6 @@ public class MainActivity extends AppCompatActivity {
         String PASSWORD = "x";
 
         String url = "http://192.168.1.39:8081/persona/hola";
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -112,12 +110,56 @@ public class MainActivity extends AppCompatActivity {
 
             return null;
         }
+    }
+
+    private class GETConParamsConAuth extends AsyncTask<Void, Void, Void>{
+
+        String USERNAME = "a";
+        String PASSWORD = "x";
+
+        String url = "http://192.168.1.33:8081/persona/saludo?nombre=jorge&apellido=rda";
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected Void doInBackground(Void... voids) {
+
+            RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+
+            /* ******************* */
+            JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            textView.setText("Response: " + response.toString());
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            textView.setText("Error: " + error.toString());
+                        }
+                    }
+
+            ){
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+
+                    String credentials = USERNAME+":"+PASSWORD;
+                    String auth = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+                    headers.put("Authorization", auth);
+                    headers.put("Content-Type", "application/json");
+                    return headers;
+                }
+            };
+            /* ******************* */
+
+            requestQueue.add(objectRequest);
+
+            return null;
         }
     }
+
 }
 
 /*
