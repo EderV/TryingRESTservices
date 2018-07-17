@@ -43,12 +43,16 @@ public class MainActivity extends AppCompatActivity {
         textView2 = (TextView) findViewById(R.id.textView);
 
 
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        try {
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
-        textView2.setText(String.valueOf(isConnected));
+            textView2.setText(String.valueOf(isConnected));
+        }catch (NullPointerException e){
+            textView2.setText("NullpointerException");
+        }
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
