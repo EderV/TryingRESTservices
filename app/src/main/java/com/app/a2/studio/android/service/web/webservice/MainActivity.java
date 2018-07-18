@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         String USERNAME = "a";
         String PASSWORD = "x";
 
-        String url = "http://192.168.1.33:8081/persona/saludo?nombre=jorge&apellido=rda";
+        String url = "http://192.168.1.39:8081/persona/saludo?nombre=jorge&apellido=rda";
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -129,10 +129,10 @@ public class MainActivity extends AppCompatActivity {
             RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
             /* ******************* */
-            JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                    new Response.Listener<JSONObject>() {
+            StringRequest objectRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
                         @Override
-                        public void onResponse(JSONObject response) {
+                        public void onResponse(String response) {
                             textView.setText("Response: " + response.toString());
                         }
                     },
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                     String credentials = USERNAME+":"+PASSWORD;
                     String auth = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
                     headers.put("Authorization", auth);
-                    headers.put("Content-Type", "application/json");
+                    headers.put("Content-Type", "application/json; charset=utf-8");
                     return headers;
                 }
             };
