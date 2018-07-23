@@ -1,8 +1,9 @@
-package com.app.a2.studio.android.service.web.webservice.WebServicesREST;
+package com.app.a2.studio.android.service.web.webservice.WebServicesREST.Services;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Base64;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -13,6 +14,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.a2.studio.android.service.web.webservice.MainActivity;
+import com.app.a2.studio.android.service.web.webservice.WebServicesREST.Interfaces.OnResponsePOSTconBody;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,21 +23,20 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WSPOSTconBody extends AsyncTask<String, Void, Void>{
+public class WSPOSTconBody extends AsyncTask<String, Void, String>{
 
-    Context applicationContext;
+    private Context applicationContext;
 
-    MainActivity mainActivity;
+    private String USERNAME;
+    private String PASSWORD;
+    private String url;
 
-    String USERNAME;
-    String PASSWORD;
+    private String respuesta;
+    private Exception exception;
 
-    String url;
+    private OnResponsePOSTconBody onResponsePOSTconBody;
 
-    String respuesta;
-
-    public WSPOSTconBody(Context context){
-        mainActivity = new MainActivity();
+    public WSPOSTconBody(Context context, OnResponsePOSTconBody callback){
 
         USERNAME = "a";
         PASSWORD = "x";
@@ -43,10 +44,11 @@ public class WSPOSTconBody extends AsyncTask<String, Void, Void>{
         url = "http://192.168.1.39:8081/persona/hola";
 
         applicationContext = context;
+        onResponsePOSTconBody = callback;
     }
 
     @Override
-    protected Void doInBackground(String... params) {
+    protected String doInBackground(String... params) {
 
         try {
 
@@ -64,6 +66,7 @@ public class WSPOSTconBody extends AsyncTask<String, Void, Void>{
                         public void onResponse(String response) {
 
                             respuesta = response.toString();
+                            Log.d("Respuesta", response);
 
                         }
                     },
@@ -71,7 +74,8 @@ public class WSPOSTconBody extends AsyncTask<String, Void, Void>{
                         @Override
                         public void onErrorResponse(VolleyError error) {
 
-
+                            exception = error;
+                            Log.d("Excepcion web", error.toString());
 
                         }
                     }
@@ -111,11 +115,17 @@ public class WSPOSTconBody extends AsyncTask<String, Void, Void>{
             e.printStackTrace();
         }
 
-        return null;
+        return respuesta;
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-        mainActivity.POSTconBodyThreadFinished(respuesta);
+    protected void onPostExecute(String respuesta) {
+        if (onResponsePOSTconBody != null) {
+            if (exception == null) {
+                onResponsePOSTconBody.onSuccess(respuesta);
+            } else {
+                onResponsePOSTconBody.onFailure(exception);
+            }
+        }
     }
 }

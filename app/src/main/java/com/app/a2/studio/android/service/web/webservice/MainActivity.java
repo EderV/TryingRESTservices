@@ -1,6 +1,5 @@
 package com.app.a2.studio.android.service.web.webservice;
 
-import android.app.VoiceInteractor;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -22,8 +21,8 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.app.a2.studio.android.service.web.webservice.WebServicesREST.WSPOSTconBody;
-import com.google.gson.JsonObject;
+import com.app.a2.studio.android.service.web.webservice.WebServicesREST.Interfaces.OnResponsePOSTconBody;
+import com.app.a2.studio.android.service.web.webservice.WebServicesREST.Services.WSPOSTconBody;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.text);
         textView2 = (TextView) findViewById(R.id.textView);
 
-        wsposTconBody = new WSPOSTconBody(this);
 
 
         try {
@@ -61,6 +59,20 @@ public class MainActivity extends AppCompatActivity {
         }catch (NullPointerException e){
             textView2.setText("NullpointerException");
         }
+
+        wsposTconBody = new WSPOSTconBody(MainActivity.this, new OnResponsePOSTconBody() {
+            @Override
+            public void onSuccess(String response) {
+                textView.setText(response);
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+                if (exception != null){
+                    textView.setText(exception.toString());
+                }
+            }
+        });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -256,11 +268,3 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
-
-/*
-
-
-
-*/
-
-
