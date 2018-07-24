@@ -31,7 +31,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     Button button;
     TextView textView, textView2;
@@ -63,7 +63,9 @@ public class MainActivity extends AppCompatActivity {
         wsposTconBody = new WSPOSTconBody(MainActivity.this, new OnResponsePOSTconBody() {
             @Override
             public void onSuccess(String response) {
-                textView.setText(response);
+                if (response != null){
+                    textView.setText(response);
+                }
             }
 
             @Override
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     //PostConBody postConBody = new PostConBody();
                     //postConBody.execute("algo", "nada");
 
-                    wsposTconBody.execute("Elena", "Cordon");
+                    wsposTconBody.executeWebService("Eder", "Villar");
                 }
             }
         });

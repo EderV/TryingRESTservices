@@ -23,16 +23,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WSPOSTconBody extends AsyncTask<String, Void, String>{
+public class WSPOSTconBody{
 
     private Context applicationContext;
 
     private String USERNAME;
     private String PASSWORD;
     private String url;
-
-    private String respuesta;
-    private Exception exception;
 
     private OnResponsePOSTconBody onResponsePOSTconBody;
 
@@ -47,16 +44,15 @@ public class WSPOSTconBody extends AsyncTask<String, Void, String>{
         onResponsePOSTconBody = callback;
     }
 
-    @Override
-    protected String doInBackground(String... params) {
+    public void executeWebService(String name, String surname){
 
         try {
 
             RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
 
             JSONObject jsonBody = new JSONObject();
-            jsonBody.put("firstname", params[0]);
-            jsonBody.put("lastname", params[1]);
+            jsonBody.put("firstname", name);
+            jsonBody.put("lastname", surname);
             final String requestBody = jsonBody.toString();
 
             /* ******************* */
@@ -65,8 +61,8 @@ public class WSPOSTconBody extends AsyncTask<String, Void, String>{
                         @Override
                         public void onResponse(String response) {
 
-                            respuesta = response.toString();
-                            Log.d("Respuesta", response);
+                            onSuccesWebService(response);
+                            Log.d("Respuesta web", response);
 
                         }
                     },
@@ -74,7 +70,7 @@ public class WSPOSTconBody extends AsyncTask<String, Void, String>{
                         @Override
                         public void onErrorResponse(VolleyError error) {
 
-                            exception = error;
+                            onFailureWebService(error);
                             Log.d("Excepcion web", error.toString());
 
                         }
@@ -115,17 +111,13 @@ public class WSPOSTconBody extends AsyncTask<String, Void, String>{
             e.printStackTrace();
         }
 
-        return respuesta;
     }
 
-    @Override
-    protected void onPostExecute(String respuesta) {
-        if (onResponsePOSTconBody != null) {
-            if (exception == null) {
-                onResponsePOSTconBody.onSuccess(respuesta);
-            } else {
-                onResponsePOSTconBody.onFailure(exception);
-            }
-        }
+    private void onSuccesWebService(String response){
+        onResponsePOSTconBody.onSuccess(response);
+    }
+
+    private void onFailureWebService(Exception exception){
+        onResponsePOSTconBody.onFailure(exception);
     }
 }
